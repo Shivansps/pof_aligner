@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="pof_aligner" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/pof_aligner" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="aligner.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="aligner.h" />
+		<Unit filename="common.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="common.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="misc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="misc.h" />
+		<Unit filename="viewers.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="viewers.h" />
+		<Unit filename="vp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="vp.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

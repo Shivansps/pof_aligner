@@ -1,0 +1,75 @@
+# depslib dependency file v1.0
+1575854287 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	"aligner.h"
+	"viewers.h"
+	"vp.h"
+	"common.h"
+
+1575818441 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\aligner.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"aligner.h"
+	"misc.h"
+
+1575818366 d:\users\shivan\facultad\pof_aligner\pof_aligner\aligner.h
+	"misc.h"
+
+1575811608 d:\users\shivan\facultad\pof_aligner\pof_aligner\typedef.h
+
+1575812279 d:\users\shivan\facultad\pof_aligner\pof_aligner\general.h
+
+1575812423 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\general.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"general.h"
+
+1575820491 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\viewers.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"misc.h"
+	"viewers.h"
+
+1575843478 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\vp.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"misc.h"
+	"vp.h"
+
+1575842582 d:\users\shivan\facultad\pof_aligner\pof_aligner\vp.h
+	"misc.h"
+
+1575819728 d:\users\shivan\facultad\pof_aligner\pof_aligner\viewers.h
+	"misc.h"
+
+1575812279 d:\users\shivan\facultad\pof_aligner\pof_aligner\misc.h
+
+1575818447 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\misc.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"misc.h"
+
+1575846457 d:\users\shivan\facultad\pof_aligner\pof_aligner\common.h
+
+1575853879 source:d:\users\shivan\facultad\pof_aligner\pof_aligner\common.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<conio.h>
+	<dirent.h>
+	"aligner.h"
+	"viewers.h"
+	"vp.h"
+	"common.h"
+
