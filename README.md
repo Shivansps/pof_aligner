@@ -50,12 +50,15 @@ pof_aligner -view -vp_in d:\exampleVP.vp -pause
 Align files : This fixes the file and create a new, aligned version of them
 ---------------------------------------------------------------------------
 *Single file
+
 pof_aligner -align -fil_in d:\example_in.pof -fil_out d:\example_out.pof
 
 *Entire Folder
+
 pof_aligner -align -fol_in d:\example_folder_in -fol_out d:\example_folder_out
 
 *VP File
+
 pof_aligner -align -vp_in d:\example.vp
 
 This will create the new aligned files in the same folder the executable it is,
@@ -66,6 +69,7 @@ this is temporal, the code to directly create a new vp file is not working yet.
 List VP Files:
 --------------
 pof_aligner -list -vp d:\example.vp
+
 
 No much usefull yet, this is meant to check the output VP file contents,
 this displays all files inside a vp.
