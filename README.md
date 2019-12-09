@@ -28,17 +28,17 @@ Show POF Info: If you want to check files
 pof_aligner -view -pof example.pof
 
 *To view a folder
--This lists all files one after the other
+This lists all files one after the other
 pof_aligner -view -fol_in d:\exampleFolder\exampleFolder2
 
--This lists all files but pauses and clear screen after each file
+This lists all files but pauses and clear screen after each file
 pof_aligner -view -fol_in d:\exampleFolder\exampleFolder2 -pause
 
 *To view a VP file
--This lists all files in a VP one after the other
+This lists all files in a VP one after the other
 pof_aligner -view -vp_in d:\exampleVP.vp
 
--This lists all files in a VP but pauses and clear screen after each file
+This lists all files in a VP but pauses and clear screen after each file
 pof_aligner -view -vp_in d:\exampleVP.vp -pause
 
 
