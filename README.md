@@ -95,3 +95,8 @@ DEFPOINTS.
 
 -String Alignment
 All lengths divisible by 4, if string is empty, length = 4 and 4 null terminators.
+
+Pre-Build
+---------
+v0.1 - Initial Release
+https://www.dropbox.com/s/rm9jr67wjqbjuhj/pof_aligner_0.1.zip?dl=0
