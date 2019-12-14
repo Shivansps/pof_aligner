@@ -157,12 +157,14 @@ int main(int argc, char *argv[])
                         {
                             printf("In and out VP files cant be the same.");
                         }
+                        fclose(vp2);
                     }
                 }
                 else
                 {
                     printf("Unable to open VP.");
                 }
+                fclose(vp);
             }
         }
         else if(strcmp(argv[1],"-list")==0)

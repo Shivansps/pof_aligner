@@ -59,25 +59,18 @@ pof_aligner -align -fol_in d:\example_folder_in -fol_out d:\example_folder_out
 
 *VP File
 
-pof_aligner -align -vp_in d:\example.vp
-
-This will create the new aligned files in the same folder the executable it is,
-this is temporal, the code to directly create a new vp file is not working yet.
-
+pof_aligner -align -vp_in d:\example.vp -vp_out d:\example_aligned.vp
 
 
 List VP Files:
 --------------
 pof_aligner -list -vp d:\example.vp
 
-
-No much usefull yet, this is meant to check the output VP file contents,
-this displays all files inside a vp.
+This displays all files inside a vp.
 
 
 TODO
 -----
--Fix the code to create the VP file directly
 -.net GUI
 
 BUGS
@@ -93,10 +86,22 @@ FUEL, GLOW, SPCL, TXTR, DOCK, PATH, SLDC, OBJ2, SOBJ.
 -BSP DATA alignment of
 DEFPOINTS.
 
+-SLDC to SLC2 conversion
+
 -String Alignment
 All lengths divisible by 4, if string is empty, length = 4 and 4 null terminators.
 
+Changelog:
+----------
+v0.2
+-Pof version output is changed to 2118
+-VP Write support, VP to VP alignment now supported.
+-SLDC to SLC2 conversion.
+
 Pre-Build
 ---------
+v0.2
+https://www.dropbox.com/s/bo21sgtq1sx77oq/pof_aligner_0.2.zip?dl=0
+
 v0.1 - Initial Release
 https://www.dropbox.com/s/rm9jr67wjqbjuhj/pof_aligner_0.1.zip?dl=0
