@@ -8,9 +8,9 @@
 #include "common.h"
 /**
     Alignment:
-    -align -fol_in XXXX -fol_out XXX
-    -align -fil_in XXXX -fil_out XXX
-    -align -vp_in XXXX
+    -align -fol_in XXXX -fol_out XXXX
+    -align -fil_in XXXX -fil_out XXXX
+    -align -vp_in XXXX -vp_out XXXX
 
 
     View:
@@ -24,11 +24,11 @@
 int main(int argc, char *argv[])
 {
     /**For Debug**/
-
+/*
     char filename[60]="D:\\FreeSpace2\\models_in\\\0";
     char filename2[60]="D:\\FreeSpace2\\models_out\\\0";
     align_folder_pofs(filename,filename2,0,0);
-
+*/
     /*
     char filename[60]="D:\\FreeSpace2\\models_out\\\0";
     show_folder_pofs(filename,1);
@@ -37,6 +37,17 @@ int main(int argc, char *argv[])
     char filename[60]="D:\\kif_darket.pof\0";
     char filename2[60]="D:\\kif_darket-a.pof\0";
     align_file_pof(filename,filename2,2);
+*/
+/*
+    char filename[60]="D:\\hermes_models.vp\0";
+    char filename2[60]="D:\\hermes_models_aligned.vp\0";
+    FILE *vp_in=fopen(filename,"rb"),*vp_out=fopen(filename2,"wb");
+    align_vp_pofs(vp_in,vp_out,0,0);
+    fclose(vp_in); fclose(vp_out);
+    vp_out=fopen(filename2,"rb");
+    fseek(vp_out,0,SEEK_SET);
+    view_vp_files(vp_out);
+    fclose(vp_out);
 */
     /**/
 
@@ -117,7 +128,14 @@ int main(int argc, char *argv[])
             {
                 if(strcmp(argv[4],"-fil_out")==0)
                 {
-                    align_file_pof(argv[3],argv[5],0);
+                    if(strcmp(argv[3],argv[5])!=0)
+                    {
+                        align_file_pof(argv[3],argv[5],0);
+                    }
+                    else
+                    {
+                        printf("In and out folders cant be the same.");
+                    }
                 }
             }
             if(strcmp(argv[2],"-vp_in")==0)
@@ -125,7 +143,21 @@ int main(int argc, char *argv[])
                 FILE *vp=fopen(argv[3],"rb");
                 if(vp)
                 {
-                    align_vp_pofs(vp,NULL,0,0);
+                    if(strcmp(argv[4],"-vp_out")==0)
+                    {
+                        FILE *vp2=fopen(argv[5],"wb");
+                        if(strcmp(argv[3],argv[5])!=0)
+                        {
+                            if(vp2)
+                                align_vp_pofs(vp,vp2,0,0);
+                            else
+                                printf("Unable to write VP file to that location.");
+                        }
+                        else
+                        {
+                            printf("In and out VP files cant be the same.");
+                        }
+                    }
                 }
                 else
                 {

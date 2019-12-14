@@ -21,7 +21,7 @@ void load_vp_index(FILE *vp, vp_index_entry *vp_index_entry, unsigned int index_
 ubyte* load_vp_file(FILE *vp, vp_index_entry vp_index_entry);
 
 void write_vp_header(FILE *vp,unsigned int index_offset, unsigned int num_files);
-void write_vp_index_entry(FILE *vp, vp_index_entry vp_index_entry, int gotoend);
-void write_vp_file(FILE *vp, ubyte *file, char *name, unsigned int filesize, unsigned int timestamp);
+void write_vp_index_entry(FILE *vp, vp_index_entry vp_index_entry);
+void write_vp_file(FILE *vp, ubyte *file, char *name, unsigned int filesize, unsigned int timestamp, vp_index_entry *index, unsigned int *num_files, unsigned int *index_offset);
 
 #endif // VP_H_INCLUDED

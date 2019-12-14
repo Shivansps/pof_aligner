@@ -234,6 +234,7 @@ void align_vp_pofs(FILE *vp_file,FILE *vp_out,int verbose, int pause)
     char header[5];
     unsigned int version, index_offset,numfiles,totalpofs=0, files_offset=16;
 
+
     system("@cls||clear");
 
     if(read_vp_header(vp_file, header,&version, &index_offset, &numfiles)==1)
@@ -248,9 +249,6 @@ void align_vp_pofs(FILE *vp_file,FILE *vp_out,int verbose, int pause)
     vp_index_entry index[numfiles];
     load_vp_index(vp_file,index,index_offset,numfiles);
 
-    vp_index_entry index_out[numfiles];
-    file_vp vp_files[numfiles];
-
     for(int x=0;x<numfiles;x++)
     {
         if(index[x].offset!=0&&index[x].filesize!=0&&index[x].timestamp!=0&&strstr(tolower(index[x].name), ".pof") != NULL)
@@ -260,6 +258,9 @@ void align_vp_pofs(FILE *vp_file,FILE *vp_out,int verbose, int pause)
     }
 
     int count=1;
+    unsigned int wvp_num_files=0, wvp_index_offset=16;
+    vp_index_entry index_out[numfiles];
+
     for(int x=0;x<numfiles;x++)
     {
         if(index[x].offset!=0&&index[x].filesize!=0&&index[x].timestamp!=0&&strstr(tolower(index[x].name), ".pof") != NULL)
@@ -301,14 +302,7 @@ void align_vp_pofs(FILE *vp_file,FILE *vp_out,int verbose, int pause)
                 }
             }
 
-            //write_vp_file(vp_out,fixed_pof,index[x].name,newsize,getUnixTime());
-
-            /*Temporal, write pof to folder*/
-            FILE *pof;
-            pof=fopen(index[x].name,"wb");
-            fwrite(fixed_pof,sizeof(ubyte),newsize,pof);
-            fclose(pof);
-            /**/
+            write_vp_file(vp_out,fixed_pof,index[x].name,newsize,getUnixTime(),index_out,&wvp_num_files,&wvp_index_offset);
 
             free(file);
 
@@ -322,15 +316,15 @@ void align_vp_pofs(FILE *vp_file,FILE *vp_out,int verbose, int pause)
         }
         else
         {
-            /*
+
             ubyte *file=NULL;
             if(index[x].offset!=0&&index[x].filesize!=0&&index[x].timestamp!=0)
             {
                 file=load_vp_file(vp_file, index[x]);
             }
-            write_vp_file(vp_out,file,index[x].name,index[x].filesize,index[x].timestamp);
+            write_vp_file(vp_out,file,index[x].name,index[x].filesize,index[x].timestamp,index_out,&wvp_num_files,&wvp_index_offset);
             free(file);
-            */
+
         }
     }
 }

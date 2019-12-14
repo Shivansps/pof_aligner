@@ -19,5 +19,5 @@ void read_typeint_and_size(ubyte *bytes, unsigned int *type_int,unsigned int *si
 
 unsigned int getUnixTime()
 {
-    return fprintf(stdout, "%u\n", (unsigned)time(NULL));
+    return (unsigned int)time(NULL);
 }

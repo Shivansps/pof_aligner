@@ -2,3 +2,4 @@
 *.o
 *.exe
 pof_aligner.layout
+bin/Debug/pof_aligner_0.2.zip

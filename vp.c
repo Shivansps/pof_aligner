@@ -4,6 +4,7 @@
 #include "misc.h"
 #include "vp.h"
 
+
 void write_vp_header(FILE *vp,unsigned int index_offset, unsigned int num_files)
 {
     char header[4]="VPVP";
@@ -16,16 +17,16 @@ void write_vp_header(FILE *vp,unsigned int index_offset, unsigned int num_files)
         fwrite(&version,4,1,vp);
         fwrite(&index_offset,4,1,vp);
         fwrite(&num_files,4,1,vp);
+/*
+        printf("%d | %d \n",num_files,index_offset);
+        getch();*/
     }
 }
 
-void write_vp_index_entry(FILE *vp, vp_index_entry index, int gotoend)
+void write_vp_index_entry(FILE *vp, vp_index_entry index)
 {
     if(vp!=NULL)
     {
-        if(gotoend)
-            fseek(vp, 0, SEEK_END);
-
         fwrite(&index.offset,4,1,vp);
         fwrite(&index.filesize,4,1,vp);
         fwrite(index.name,1,32,vp);
@@ -33,87 +34,40 @@ void write_vp_index_entry(FILE *vp, vp_index_entry index, int gotoend)
     }
 }
 
-void write_vp_file(FILE *vp, ubyte *file, char *name, unsigned int filesize, unsigned int timestamp)
+void write_vp_file(FILE *vp, ubyte *file, char *name, unsigned int filesize, unsigned int timestamp, vp_index_entry *index, unsigned int *num_files, unsigned int *index_offset)
 {
-    /*This dosent work*/
-    long vpsize;
-    unsigned int index_offset=16,numfiles=1;
 
     if(vp!=NULL)
     {
-        fseek(vp, 0, SEEK_END);
-        vpsize = ftell(vp);
-        fseek(vp, 0, SEEK_SET);
-
-        if(vpsize==0)
+        if(filesize==0&&timestamp==0)
         {
-            /*FIRST IS ALWAYS A FOLDER*/
-            write_vp_header(vp, index_offset, numfiles);
-            vp_index_entry ie;
-            ie.filesize=0;
-            memcpy(ie.name,name,32);
-            ie.offset=0;
-            ie.timestamp=0;
-            write_vp_index_entry(vp,ie,1);
+            /*FOLDER*/
+            index[*num_files].filesize=0;
+            index[*num_files].timestamp=0;
+            index[*num_files].offset=0;
+            strcpy(index[*num_files].name,name);
+            (*num_files)++;
+            write_vp_header(vp,*index_offset,*num_files);
+            fseek(vp,*index_offset,SEEK_SET);
+            for(int i=0;i<*num_files;i++)
+                write_vp_index_entry(vp,index[i]);
         }
         else
         {
-            /*ADD TO FILE*/
-            if(filesize!=0&&timestamp!=0)
-            {
-                /*THIS IS A FILE*/
-                unsigned int version, file_offset;
-                char header[5];
-                read_vp_header(vp,header,&version,&index_offset,&numfiles);
-                vp_index_entry index[numfiles];
-                load_vp_index(vp,index,index_offset,numfiles);
-
-                fseek(vp, index_offset, SEEK_SET);
-
-                fwrite(file,1,filesize,vp);
-
-                file_offset=index_offset;
-
-                index_offset+=filesize;
-
-                numfiles++;
-
-                write_vp_header(vp, index_offset, numfiles);
-
-                fseek(vp, index_offset, SEEK_SET);
-
-                for(int x=0;x<numfiles-1;x++)
-                {
-                    write_vp_index_entry(vp,index[x],0);
-                }
-
-                vp_index_entry ie;
-                ie.filesize=filesize;
-                memcpy(ie.name,name,32);
-                ie.offset=file_offset;
-                ie.timestamp=timestamp;
-                write_vp_index_entry(vp,ie,0);
-            }
-            else
-            {
-                /*THIS IS A FOLDER OR BACKSLASH*/
-
-                unsigned int version;
-                char header[5];
-                read_vp_header(vp,header,&version,&index_offset,&numfiles);
-                numfiles+=1;
-                write_vp_header(vp, index_offset, numfiles);
-
-                vp_index_entry ie;
-                ie.filesize=0;
-                memcpy(ie.name,name,32);
-                ie.offset=0;
-                ie.timestamp=0;
-                write_vp_index_entry(vp,ie,1);
-            }
+            /*FILE*/
+            index[*num_files].filesize=filesize;
+            index[*num_files].timestamp=timestamp;
+            index[*num_files].offset=*index_offset;
+            strcpy(index[*num_files].name,name);
+            (*num_files)++;
+            write_vp_header(vp,*index_offset,*num_files);
+            fseek(vp,*index_offset,SEEK_SET);
+            fwrite(file,sizeof(ubyte),filesize,vp);
+            (*index_offset)+=filesize;
+            for(int i=0;i<*num_files;i++)
+                write_vp_index_entry(vp,index[i]);
         }
     }
-
 }
 
 ubyte* load_vp_file(FILE *vp, vp_index_entry vp_index_entry)
@@ -156,10 +110,10 @@ int read_vp_header(FILE *vp, char *header,unsigned int *version, unsigned int *i
         fseek(vp, 0, SEEK_SET);
         fread(header,1,4,vp);
         fread(version,4,1,vp);
-        fread(index_offset,1,4,vp);
-        fread(num_files,1,4,vp);
+        fread(index_offset,4,1,vp);
+        fread(num_files,4,1,vp);
         header[4]='\0';
-        if(strcmp("VPVP\0",header)==0)
+        if(strcmp("VPVP",header)==0)
             return 1;
         else
             return 0;

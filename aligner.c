@@ -468,6 +468,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
         else if (strcmp(chunk_typechar, "SLDC") == 0)  /*************/
         {
             /*Only basic alignment for SLDC*/
+
             memcpy(aligned_pof,pof_bytes,chunk_size+8);
 
             if(unaligned)
@@ -485,7 +486,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
 
             /*Convert SLDC to SLC2*/
             ubyte *p_tree_size, *p_chunk_size;
-            unsigned int tree_size,node_size,node_type_int, new_tree_size, count=0;
+            unsigned int tree_size,node_size,node_type_int, new_tree_size=0, count=0;
             char node_type_char, new_type[4]="SLC2";
 
             //Copy Chunk ID and save tree size and chunk size locations
@@ -495,6 +496,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             copied+=12;
             aligned_pof+=12;
             pof_bytes+=8;
+
             memcpy(&tree_size,pof_bytes,4);
             pof_bytes+=4;
 
