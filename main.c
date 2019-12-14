@@ -20,25 +20,24 @@
 
     ListVP:
     -list -vp XXXX
-
 **/
 int main(int argc, char *argv[])
 {
     /**For Debug**/
-    /*
+
     char filename[60]="D:\\FreeSpace2\\models_in\\\0";
     char filename2[60]="D:\\FreeSpace2\\models_out\\\0";
-    align_folder_pofs(filename,filename2,3,1);
-    */
+    align_folder_pofs(filename,filename2,0,0);
+
     /*
     char filename[60]="D:\\FreeSpace2\\models_out\\\0";
     show_folder_pofs(filename,1);
     */
-    /*
+/*
     char filename[60]="D:\\kif_darket.pof\0";
     char filename2[60]="D:\\kif_darket-a.pof\0";
     align_file_pof(filename,filename2,2);
-    */
+*/
     /**/
 
     if(argc>2)

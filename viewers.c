@@ -91,6 +91,11 @@ int view_pof(ubyte *pof_bytes, int total_size)
         }
         else if (strcmp(chunk_typechar, "SLDC") == 0)
         {
+            //view_sldc(pof_bytes+8);
+        }
+        else if (strcmp(chunk_typechar, "SLC2") == 0)
+        {
+            //view_slc2(pof_bytes+8);
         }
         else
         {
@@ -101,6 +106,102 @@ int view_pof(ubyte *pof_bytes, int total_size)
         pof_bytes+=chunk_size+8;
     }
     return alignment;
+}
+
+int view_slc2(ubyte *bytes)
+{
+    unsigned int tree_size,node_size,node_type, count=0;
+    memcpy(&tree_size,bytes,4);
+    bytes+=4;
+    printf("********* SLC2 TREE SIZE : %d \n",tree_size);
+
+    while(count<tree_size)
+    {
+        memcpy(&node_type,bytes,4);
+        memcpy(&node_size,bytes+4,4);
+        printf("********* SLC2 NODE TYPE : %d ",node_type);
+
+        if(node_type==0)
+            printf("(SPLIT) | SIZE : %d \n",node_size);
+        else
+            printf("(LEAF) | SIZE : %d \n",node_size);
+
+        float x,y,z;
+        memcpy(&x,bytes+8,4);
+        memcpy(&y,bytes+12,4);
+        memcpy(&z,bytes+16,4);
+        printf("********* SLC2 VECTOR BOUND MIN ( %.2f;%.2f;%.2f ) \n",x,y,z);
+        memcpy(&x,bytes+20,4);
+        memcpy(&y,bytes+24,4);
+        memcpy(&z,bytes+28,4);
+        printf("********* SLC2 VECTOR BOUND MAX ( %.2f;%.2f;%.2f ) \n",x,y,z);
+
+        if(node_type==0)
+        {
+            int front, back;
+            memcpy(&front,bytes+32,4);
+            memcpy(&back,bytes+36,4);
+            printf("********* SLDC OFFSETS: FRONT: %d | BACK: %d \n",front,back);
+        }
+        else
+        {
+            int poly;
+            memcpy(&poly,bytes+32,4);
+            printf("********* SLDC NUM POLYGONS: %d \n",poly);
+        }
+
+        bytes+=node_size;
+        count+=node_size;
+    }
+}
+
+int view_sldc(ubyte *bytes)
+{
+    unsigned int tree_size,node_size, count=0;
+    char node_type;
+    memcpy(&tree_size,bytes,4);
+    bytes+=4;
+    printf("********* SLDC TREE SIZE : %d \n",tree_size);
+
+    while(count<tree_size)
+    {
+        memcpy(&node_type,bytes,1);
+        memcpy(&node_size,bytes+1,4);
+        printf("********* SLDC NODE TYPE : %d ",node_type);
+
+        if(node_type==0)
+            printf("(SPLIT) | SIZE : %d \n",node_size);
+        else
+            printf("(LEAF) | SIZE : %d \n",node_size);
+
+        float x,y,z;
+        memcpy(&x,bytes+5,4);
+        memcpy(&y,bytes+9,4);
+        memcpy(&z,bytes+13,4);
+        printf("********* SLDC VECTOR BOUND MIN ( %.2f;%.2f;%.2f ) \n",x,y,z);
+        memcpy(&x,bytes+17,4);
+        memcpy(&y,bytes+21,4);
+        memcpy(&z,bytes+25,4);
+        printf("********* SLDC VECTOR BOUND MAX ( %.2f;%.2f;%.2f ) \n",x,y,z);
+
+
+        if(node_type==0)
+        {
+            int front, back;
+            memcpy(&front,bytes+29,4);
+            memcpy(&back,bytes+33,4);
+            printf("********* SLDC OFFSETS: FRONT: %d | BACK: %d \n",front,back);
+        }
+        else
+        {
+            int poly;
+            memcpy(&poly,bytes+29,4);
+            printf("********* SLDC NUM POLYGONS: %d \n",poly);
+        }
+
+        bytes+=node_size;
+        count+=node_size;
+    }
 }
 
 int view_fuel(ubyte *bytes, int version)

@@ -8,6 +8,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
  {
     unsigned int chunk_size;
     unsigned long copied=0;
+    int new_pof_version=2118;
     char chunk_typechar[5];
     int unaligned=0;
     int version;
@@ -20,6 +21,13 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
     pof_bytes+=8;
     aligned_pof+=8;
     copied+=8;
+
+    /*Only convert to 2117 to 2118 in order not to break internal structures of older versions*/
+    if(version==2117)
+    {
+        memcpy(aligned_pof-4,&new_pof_version,4);
+    }
+
 
     while(pof_bytes<init_pos+total_size)
     {
@@ -458,12 +466,13 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             memcpy(size_offset,&new_sizes,4);
         }
         else if (strcmp(chunk_typechar, "SLDC") == 0)  /*************/
-        {   /**PROBLEMATIC, THIS IS UNALIGNED BY DESIGN**/
+        {
+            /*Only basic alignment for SLDC*/
             memcpy(aligned_pof,pof_bytes,chunk_size+8);
 
             if(unaligned)
             {
-                printf("SLDC DATA ALIGNED.\n");
+                printf("%SLDC DATA ALIGNED.\n");
                 memcpy(aligned_pof+4,&unaligned,4);
                 aligned_pof+=unaligned+8;
                 copied+=unaligned+8;
@@ -473,7 +482,100 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 aligned_pof+=chunk_size+8;
                 copied+=chunk_size+8;
             }
-            pof_bytes+=chunk_size+8;
+
+            /*Convert SLDC to SLC2*/
+            ubyte *p_tree_size, *p_chunk_size;
+            unsigned int tree_size,node_size,node_type_int, new_tree_size, count=0;
+            char node_type_char, new_type[4]="SLC2";
+
+            //Copy Chunk ID and save tree size and chunk size locations
+            memcpy(aligned_pof,new_type,4);
+            p_chunk_size=aligned_pof+4;
+            p_tree_size=aligned_pof+8;
+            copied+=12;
+            aligned_pof+=12;
+            pof_bytes+=8;
+            memcpy(&tree_size,pof_bytes,4);
+            pof_bytes+=4;
+
+            //Process the SLDC tree to the end
+            while(count<tree_size)
+            {
+                //Save Node type and size
+                memcpy(&node_type_char,pof_bytes,1);
+                memcpy(&node_size,pof_bytes+1,4);
+
+                //Convert Node type to int
+                node_type_int = (int)node_type_char;
+
+                //Copy node type and adjusted node size, move pointers
+                memcpy(aligned_pof,&node_type_int,4);
+                node_size+=3;
+                memcpy(aligned_pof+4,&node_size,4);
+                node_size-=3;
+                copied+=8;
+                aligned_pof+=8;
+                pof_bytes+=5;
+
+
+                //Copy Vectors
+                memcpy(aligned_pof,pof_bytes,24);
+                copied+=24;
+                aligned_pof+=24;
+                pof_bytes+=24;
+
+                if(node_type_char==0)
+                {
+                    //Front and back offsets must be adjusted
+                    int front,back,newback=0;
+                    ubyte *p;
+
+                    p=pof_bytes-29;
+                    memcpy(&back,p+33,4);
+
+                    //printf("DEBUG: old back : %d\n",back);
+
+                    //I need to find the new distance to back.
+                    while(p<pof_bytes+back-29)
+                    {
+                        int ns;
+                        memcpy(&ns,p+1,4);
+                        //printf("DEBUG: ns : %d \n",ns);
+                        p+=ns;
+                        newback+=ns+3;
+
+                    }
+                    //printf("DEBUG: newback: %d\n",newback);
+
+                    //Copy offsets
+                    front=node_size+3;
+                    memcpy(aligned_pof,&front,4); //Front is always this node size+3;
+                    memcpy(aligned_pof+4,&newback,4);
+
+                    copied+=8;
+                    aligned_pof+=8;
+                    pof_bytes+=8;
+                }
+                else
+                {
+                    //Copy the remaining data on the node
+                    memcpy(aligned_pof,pof_bytes,node_size-29);
+
+                    //Move pointers
+                    copied+=node_size-29;
+                    aligned_pof+=node_size-29;
+                    pof_bytes+=node_size-29;
+                }
+
+                //Count the new tree size and move the counter
+                count+=node_size;
+                new_tree_size+=node_size+3;
+            }
+            //Copy the new chunk and tree size
+            memcpy(p_tree_size,&new_tree_size,4);
+            new_tree_size+=4;
+            memcpy(p_chunk_size,&new_tree_size,4);
+            printf("SLDC DATA CONVERTED TO SLC2.\n");
         }
         else if (strcmp(chunk_typechar, "OBJ2") == 0 || strcmp(chunk_typechar, "SOBJ") == 0) /*************/
         {
@@ -635,6 +737,11 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             aligned_pof+=unaligned+8;
             copied+=unaligned+8;
 
+            pof_bytes+=chunk_size+8;
+        }
+        else if (strcmp(chunk_typechar, "SLC2") == 0)
+        {
+            /*IGNORE*/
             pof_bytes+=chunk_size+8;
         }
         else    /*************/

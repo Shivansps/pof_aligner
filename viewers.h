@@ -16,5 +16,7 @@ int view_bsp_defpoints(ubyte *bytes);
 int view_spcl(ubyte *bytes);
 int view_pinf(ubyte *bytes, unsigned int chunk_size);
 int view_glow(ubyte *bytes);
+int view_sldc(ubyte *bytes);
+int view_slc2(ubyte *bytes);
 
 #endif // VIEWERS_H_INCLUDED

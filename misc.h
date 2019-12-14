@@ -1,7 +1,7 @@
 #ifndef GENERAL_H_INCLUDED
 #define GENERAL_H_INCLUDED
 
-#define VERSION "0.1"
+#define VERSION "0.2"
 
 //FSO Compatibility
 typedef void ubyte;

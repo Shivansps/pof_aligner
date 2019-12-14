@@ -73,3 +73,66 @@
 	"vp.h"
 	"common.h"
 
+1576284970 source:d:\users\shivan\documents\github\pof_aligner\aligner.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"aligner.h"
+	"misc.h"
+
+1576117142 d:\users\shivan\documents\github\pof_aligner\aligner.h
+	"misc.h"
+
+1576199834 d:\users\shivan\documents\github\pof_aligner\misc.h
+
+1576117142 source:d:\users\shivan\documents\github\pof_aligner\common.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<conio.h>
+	<dirent.h>
+	"aligner.h"
+	"viewers.h"
+	"vp.h"
+	"common.h"
+
+1576121440 d:\users\shivan\documents\github\pof_aligner\viewers.h
+	"misc.h"
+
+1576117142 d:\users\shivan\documents\github\pof_aligner\vp.h
+	"misc.h"
+
+1576117142 d:\users\shivan\documents\github\pof_aligner\common.h
+
+1576285063 source:d:\users\shivan\documents\github\pof_aligner\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	"aligner.h"
+	"viewers.h"
+	"vp.h"
+	"common.h"
+
+1576117142 source:d:\users\shivan\documents\github\pof_aligner\misc.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"misc.h"
+
+1576117142 source:d:\users\shivan\documents\github\pof_aligner\vp.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"misc.h"
+	"vp.h"
+
+1576285042 source:d:\users\shivan\documents\github\pof_aligner\viewers.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"misc.h"
+	"viewers.h"
+
