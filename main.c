@@ -34,9 +34,9 @@ int main(int argc, char *argv[])
     show_folder_pofs(filename,1);
     */
 /*
-    char filename[60]="D:\\kif_darket.pof\0";
-    char filename2[60]="D:\\kif_darket-a.pof\0";
-    align_file_pof(filename,filename2,2);
+    char filename[60]="D:\\kif_darket-a.pof\0";
+    char filename2[60]="D:\\kif_darket-aa.pof\0";
+    align_file_pof(filename,filename2,3);
 */
 /*
     char filename[60]="D:\\hermes_models.vp\0";

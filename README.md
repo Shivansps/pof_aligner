@@ -93,6 +93,9 @@ All lengths divisible by 4, if string is empty, length = 4 and 4 null terminator
 
 Changelog:
 ----------
+v0.3
+-Fixed a bug that caused up to 84 bytes of data been cut off the end of the file.
+
 v0.2
 -Pof version output is changed to 2118
 -VP Write support, VP to VP alignment now supported.
@@ -100,6 +103,9 @@ v0.2
 
 Pre-Build
 ---------
+v0.3
+https://www.dropbox.com/s/w7e02ousfgbe3d6/pof_aligner_0.3.zip?dl=0
+
 v0.2
 https://www.dropbox.com/s/bo21sgtq1sx77oq/pof_aligner_0.2.zip?dl=0
 

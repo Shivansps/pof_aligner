@@ -28,7 +28,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
         memcpy(aligned_pof-4,&new_pof_version,4);
     }
 
-
     while(pof_bytes<init_pos+total_size)
     {
         read_typechar_and_size(pof_bytes, chunk_typechar,&chunk_size);
@@ -49,6 +48,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             pof_bytes+=8;
             size_offset=aligned_pof+4;
             aligned_pof+=12;
+            copied+=8;
 
             //Copy num thrusters
             memcpy(&num_thr,pof_bytes,4);
@@ -64,7 +64,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 memcpy(aligned_pof,pof_bytes,4);
                 new_sizes+=4;
                 pof_bytes+=4;
-                copied+=4;
                 aligned_pof+=4;
 
                 //Copy properties, enforce alignment
@@ -81,7 +80,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -92,17 +90,16 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
                 //Copy glow data
                 memcpy(aligned_pof,pof_bytes,28*glows);
                 new_sizes+=28*glows;
                 pof_bytes+=28*glows;
-                copied+=28*glows;
                 aligned_pof+=28*glows;
             }
             //Update chunk size
             memcpy(size_offset,&new_sizes,4);
+            copied+=new_sizes;
         }
         else if (strcmp(chunk_typechar, "GLOW") == 0)
         {
@@ -113,7 +110,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             pof_bytes+=8;
             size_offset=aligned_pof+4;
             aligned_pof+=12;
-
+            copied+=8;
             memcpy(&num_gb,pof_bytes,4);
             pof_bytes+=4;
             new_sizes+=4;
@@ -124,7 +121,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 memcpy(aligned_pof,pof_bytes,28);
                 new_sizes+=28;
                 pof_bytes+=28;
-                copied+=28;
                 aligned_pof+=28;
                 memcpy(&num_glows,pof_bytes-4,4);
 
@@ -141,7 +137,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -152,15 +147,14 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
 
                 memcpy(aligned_pof,pof_bytes,28*num_glows);
                 new_sizes+=28*num_glows;
                 pof_bytes+=28*num_glows;
-                copied+=28*num_glows;
                 aligned_pof+=28*num_glows;
             }
+            copied+=new_sizes;
             memcpy(size_offset,&new_sizes,4);
         }
         else if (strcmp(chunk_typechar, "SPCL") == 0)
@@ -170,6 +164,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             ubyte *size_offset;
             memcpy(aligned_pof,pof_bytes,12);
             pof_bytes+=8;
+            copied+=8;
             size_offset=aligned_pof+4;
             aligned_pof+=12;
 
@@ -192,7 +187,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -203,7 +197,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
 
 
@@ -220,7 +213,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -231,14 +223,13 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
                 memcpy(aligned_pof,pof_bytes,16);
                 new_sizes+=16;
                 pof_bytes+=16;
-                copied+=16;
                 aligned_pof+=16;
             }
+            copied+=new_sizes;
             memcpy(size_offset,&new_sizes,4);
         }
         else if (strcmp(chunk_typechar, "TXTR") == 0)
@@ -250,7 +241,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             pof_bytes+=8;
             size_offset=aligned_pof+4;
             aligned_pof+=12;
-
+            copied+=8;
             memcpy(&num_textures,pof_bytes,4);
             pof_bytes+=4;
             new_sizes+=4;
@@ -270,7 +261,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -281,9 +271,9 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
             }
+            copied+=new_sizes;
             memcpy(size_offset,&new_sizes,4);
         }
         else if (strcmp(chunk_typechar, "DOCK") == 0)  /*************/
@@ -296,6 +286,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             pof_bytes+=8;
             size_offset=aligned_pof+4;
             aligned_pof+=12;
+            copied+=8;
 
             //Copy num docks
             memcpy(&num_docks,pof_bytes,4);
@@ -320,7 +311,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -331,7 +321,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
 
                 //Copy spline paths
@@ -339,14 +328,12 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 memcpy(aligned_pof,pof_bytes,4);
                 new_sizes+=4;
                 pof_bytes+=4;
-                copied+=4;
                 aligned_pof+=4;
 
 
                 memcpy(aligned_pof,pof_bytes,4*spline);
                 new_sizes+=4*spline;
                 pof_bytes+=4*spline;
-                copied+=4*spline;
                 aligned_pof+=4*spline;
 
                 //Now copy dock points and vectors
@@ -354,17 +341,16 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 memcpy(aligned_pof,pof_bytes,4);
                 new_sizes+=4;
                 pof_bytes+=4;
-                copied+=4;
                 aligned_pof+=4;
 
                 memcpy(aligned_pof,pof_bytes,24*spline);
                 new_sizes+=24*spline;
                 pof_bytes+=24*spline;
-                copied+=24*spline;
                 aligned_pof+=24*spline;
             }
             //Update chunk size
             memcpy(size_offset,&new_sizes,4);
+            copied+=new_sizes;
         }
         else if (strcmp(chunk_typechar, "PATH") == 0)  /*************/
         {
@@ -375,7 +361,7 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
             pof_bytes+=8;
             size_offset=aligned_pof+4;
             aligned_pof+=12;
-
+            copied+=8;
             memcpy(&num_paths,pof_bytes,4);
             pof_bytes+=4;
             new_sizes+=4;
@@ -395,7 +381,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -406,7 +391,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
 
                 memcpy(&i,pof_bytes,4);
@@ -422,7 +406,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memset(aligned_pof+i,'\0',newsize-i);
                     new_sizes+=newsize+4;
                     aligned_pof+=newsize;
-                    copied+=newsize+4;
                     pof_bytes+=i;
                 }
                 else
@@ -433,7 +416,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     aligned_pof+=i;
                     new_sizes+=i+4;
                     pof_bytes+=i;
-                    copied+=i+4;
                 }
 
                 int verts;
@@ -441,7 +423,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 memcpy(aligned_pof,pof_bytes,4);
                 new_sizes+=4;
                 pof_bytes+=4;
-                copied+=4;
                 aligned_pof+=4;
 
                 for(int v=0;v<verts;v++)
@@ -449,7 +430,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                     memcpy(aligned_pof,pof_bytes,20);
                     new_sizes+=20;
                     pof_bytes+=20;
-                    copied+=20;
                     aligned_pof+=20;
                     int turrets;
                     memcpy(&turrets,pof_bytes-4,4);
@@ -458,11 +438,11 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                         memcpy(aligned_pof,pof_bytes,turrets*4);
                         new_sizes+=turrets*4;
                         pof_bytes+=turrets*4;
-                        copied+=turrets*4;
                         aligned_pof+=turrets*4;
                     }
                 }
             }
+            copied+=new_sizes;
             memcpy(size_offset,&new_sizes,4);
         }
         else if (strcmp(chunk_typechar, "SLDC") == 0)  /*************/
@@ -724,8 +704,6 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
         }
         else if (strcmp(chunk_typechar, "PINF") == 0)
         {
-            memcpy(aligned_pof,pof_bytes,chunk_size+8);
-
             if(unaligned)
             {
                 printf("PINF DATA ALIGNED.\n");
@@ -735,17 +713,18 @@ unsigned long align_pof(ubyte *pof_bytes, unsigned long total_size, ubyte *align
                 unaligned=chunk_size;
             }
 
-            unaligned+=32;
+            memcpy(aligned_pof,pof_bytes,8);
+            unaligned+=36;
+            memset(aligned_pof+8,'\0',unaligned);
             memcpy(aligned_pof+4,&unaligned,4);
-            memset(aligned_pof+8+chunk_size,'\0',unaligned-chunk_size);
 
-
-            strcat(aligned_pof+8+chunk_size-2,"\nAligned with POF_Aligner v ");
-            strcat(aligned_pof+28+chunk_size+6,VERSION);
+            strcat(aligned_pof+8,"Processed with POF_Aligner  v ");
+            strcat(aligned_pof+38,VERSION);
+            memset(aligned_pof+41,'\n',1);
+            memcpy(aligned_pof+42,pof_bytes+8,chunk_size);
 
             aligned_pof+=unaligned+8;
             copied+=unaligned+8;
-
             pof_bytes+=chunk_size+8;
         }
         else if (strcmp(chunk_typechar, "SLC2") == 0)
