@@ -17,6 +17,9 @@ void write_vp_header(FILE *vp,unsigned int index_offset, unsigned int num_files)
         fwrite(&version,4,1,vp);
         fwrite(&index_offset,4,1,vp);
         fwrite(&num_files,4,1,vp);
+/*
+        printf("%d | %d \n",num_files,index_offset);
+        getch();*/
     }
 }
 
@@ -52,18 +55,17 @@ void write_vp_file(FILE *vp, ubyte *file, char *name, unsigned int filesize, uns
         else
         {
             /*FILE*/
-            index[*num_files].filesize = filesize;
-            index[*num_files].timestamp = timestamp;
-            index[*num_files].offset = *index_offset;
-            strcpy(index[*num_files].name, name);
+            index[*num_files].filesize=filesize;
+            index[*num_files].timestamp=timestamp;
+            index[*num_files].offset=*index_offset;
+            strcpy(index[*num_files].name,name);
             (*num_files)++;
-            int newindexOffset = (*index_offset) + filesize;
-            write_vp_header(vp, newindexOffset, *num_files);
-            fseek(vp, *index_offset, SEEK_SET);
-            fwrite(file, sizeof(ubyte), filesize, vp);
-            (*index_offset) += filesize;
-            for (int i = 0; i < *num_files; i++)
-                write_vp_index_entry(vp, index[i]);
+            write_vp_header(vp,*index_offset,*num_files);
+            fseek(vp,*index_offset,SEEK_SET);
+            fwrite(file,sizeof(ubyte),filesize,vp);
+            (*index_offset)+=filesize;
+            for(int i=0;i<*num_files;i++)
+                write_vp_index_entry(vp,index[i]);
         }
     }
 }
@@ -94,7 +96,7 @@ void load_vp_index(FILE *vp, vp_index_entry *vp_index_entry, unsigned int index_
             fread(bytes,44,1,vp);
             memcpy(&vp_index_entry[x].offset,bytes,4);
             memcpy(&vp_index_entry[x].filesize,bytes+4,4);
-            memset(&vp_index_entry[x].name,'\0',32);
+            memset(&vp_index_entry[x].name,'\0',36);
             memcpy(&vp_index_entry[x].name,bytes+8,32);
             memcpy(&vp_index_entry[x].timestamp,bytes+40,4);
         }
