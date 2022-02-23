@@ -2,8 +2,7 @@
 POF data alignment for FS2 Open
 
 /********************************************************************/
-	POF ALIGNER v0.1 - Cipolla Salvador shivanuo@hotmail.com
-	  License? You can use it and do wharever you want.
+
 /********************************************************************/
 
 POF ALIGNER aligns the .pof files that Freespace 2 uses so they are
